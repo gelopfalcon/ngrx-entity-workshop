@@ -2,10 +2,14 @@ import { Action } from "@ngrx/store";
 import { IPizzaState } from "./pizza.state";
 import { PizzaActionTypes, PizzaActions } from "./pizza.actions";
 import { error } from "util";
+import { EntityAdapter, createEntityAdapter } from "@ngrx/entity";
+import { IPizza } from "../interfaces/pizza.interface";
 
-export const initialState: IPizzaState = {
-  pizzas: []
-};
+export const adapter: EntityAdapter<IPizza> = createEntityAdapter<IPizza>();
+
+export const initialState: IPizzaState = adapter.getInitialState({
+  error: null
+});
 
 export function pizzaReducer(
   state = initialState,
@@ -13,24 +17,18 @@ export function pizzaReducer(
 ): IPizzaState {
   switch (action.type) {
     case PizzaActionTypes.LoadPizzasSuccess: {
-      return {
-        pizzas: action.payload
-      };
+      return adapter.addMany(action.payload, state);
     }
+
     case PizzaActionTypes.DeletePizzaSuccess: {
-      return {
-        pizzas: action.payload
-      };
+      return adapter.removeOne(action.payload.id, state);
     }
+
     case PizzaActionTypes.UpdatePizzaSuccess: {
-      return {
-        pizzas: action.payload
-      };
+      return adapter.updateOne(action.payload, state);
     }
     case PizzaActionTypes.AddPizzaSuccess: {
-      return {
-        pizzas: action.payload
-      };
+      return adapter.addOne(action.payload, state);
     }
 
     case PizzaActionTypes.AddPizzaFailed: {
@@ -51,7 +49,8 @@ export function pizzaReducer(
       return {
         ...state,
         error: action.payload
-      };}
+      };
+    }
 
     case PizzaActionTypes.LoadPizzasFailed: {
       return {

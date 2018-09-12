@@ -11,8 +11,8 @@ import { IPizza } from "./interfaces/pizza.interface";
 import { Store } from "@ngrx/store";
 import { IPizzaState } from "./store/pizza.state";
 import { LoadPizzas } from "./store/pizza.actions";
-import { getPizzaSelector } from "../pizza/store/pizza.selectors";
 import * as actions from "../pizza/store/pizza.actions";
+import * as pizzaSelectors from "./store/pizza.selectors";
 
 @Component({
   selector: "app-pizza",
@@ -30,7 +30,7 @@ export class PizzaComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new LoadPizzas());
-    this.pizzas = this.store.select(getPizzaSelector);
+    this.pizzas = this.store.select(pizzaSelectors.selectAll);
     this.createForm();
     this.editingPizza = this.setPizzaDefault();
   }

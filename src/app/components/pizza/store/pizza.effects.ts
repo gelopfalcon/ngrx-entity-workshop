@@ -23,7 +23,7 @@ import {
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import { of } from "rxjs";
 import { IPizza } from "../interfaces/pizza.interface";
-import { getPizzaSelector } from "./pizza.selectors";
+import { Update } from "@ngrx/entity";
 
 @Injectable()
 export class PizzaEffects {
@@ -51,14 +51,9 @@ export class PizzaEffects {
     .pipe(
       switchMap(action => {
         return this.pizzaService.deletePizza(action.payload.id).pipe(
-          withLatestFrom(this.store.select(getPizzaSelector)),
-          map(([anAction, currentPizzas]) => {
-            const pizzas = currentPizzas.filter(pizza => {
-              return pizza.id != action.payload.id;
-            });
-            return new DeletePizzaSuccess(pizzas);
-          }),
-          catchError(err => of(new DeletePizzaFailed(err)))
+          map(() => {
+            return new DeletePizzaSuccess(action.payload);
+          }, catchError(err => of(new DeletePizzaFailed(err))))
         );
       })
     );
@@ -69,13 +64,14 @@ export class PizzaEffects {
     .pipe(
       switchMap(action => {
         return this.pizzaService.updatePizza(action.payload).pipe(
-          withLatestFrom(this.store.select(getPizzaSelector)),
-          map(([anAction, currentPizzas]) => {
-            const updatedPizza = action.payload;
-            const pizzas = currentPizzas.map(pizza => {
-              return pizza.id === updatedPizza.id ? updatedPizza : pizza;
-            });
-            return new UpdatePizzaSuccess(pizzas);
+          map(pizza => {
+            const updatedPizza: Update<IPizza> = {
+              id: pizza.id,
+              changes: {
+                price: pizza.price
+              }
+            };
+            return new UpdatePizzaSuccess(updatedPizza);
           }),
           catchError(err => of(new UpdatePizzaFailed(err)))
         );
@@ -88,12 +84,7 @@ export class PizzaEffects {
     .pipe(
       switchMap(action => {
         return this.pizzaService.createPizza(action.payload).pipe(
-          withLatestFrom(this.store.select(getPizzaSelector)),
-          map(([anAction, currentPizzas]) => {
-            let clonedPizzas = cloneDeep(currentPizzas);
-            clonedPizzas.push(action.payload);
-            return new AddPizzaSuccess(clonedPizzas);
-          }),
+          map(pizza => new AddPizzaSuccess(pizza)),
           catchError(err => of(new AddPizzaFailed(err)))
         );
       })

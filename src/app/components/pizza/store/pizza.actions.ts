@@ -43,7 +43,7 @@ export class AddPizza implements Action {
 
 export class AddPizzaSuccess implements Action {
   readonly type = PizzaActionTypes.AddPizzaSuccess;
-  constructor(public payload: IPizza[]) {}
+  constructor(public payload: IPizza) {}
 }
 
 export class AddPizzaFailed implements Action {
@@ -53,13 +53,12 @@ export class AddPizzaFailed implements Action {
 
 export class DeletePizza implements Action {
   readonly type = PizzaActionTypes.DeletePizza;
-
   constructor(public payload: IPizza) {}
 }
 
 export class DeletePizzaSuccess implements Action {
   readonly type = PizzaActionTypes.DeletePizzaSuccess;
-  constructor(public payload: IPizza[]) {}
+  constructor(public payload: IPizza) {}
 }
 
 export class DeletePizzaFailed implements Action {
@@ -75,7 +74,7 @@ export class UpdatePizza implements Action {
 
 export class UpdatePizzaSuccess implements Action {
   readonly type = PizzaActionTypes.UpdatePizzaSuccess;
-  constructor(public payload: IPizza[]) {}
+  constructor(public payload: Update<IPizza>) {}
 }
 
 export class UpdatePizzaFailed implements Action {
