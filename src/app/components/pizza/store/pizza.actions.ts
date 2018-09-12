@@ -32,7 +32,7 @@ export class LoadPizzasSuccess implements Action {
 export class LoadPizzasFailed implements Action {
   readonly type = PizzaActionTypes.LoadPizzasFailed;
 
-  constructor(public payload: {error: Error}) {}
+  constructor(public payload: Error) {}
 }
 
 export class AddPizza implements Action {
@@ -48,13 +48,13 @@ export class AddPizzaSuccess implements Action {
 
 export class AddPizzaFailed implements Action {
   readonly type = PizzaActionTypes.AddPizzaFailed;
-  constructor(public payload: {error: Error}) {}
+  constructor(public payload: Error) {}
 }
 
 export class DeletePizza implements Action {
   readonly type = PizzaActionTypes.DeletePizza;
 
-  constructor(public payload: { id: string }) {}
+  constructor(public payload: IPizza) {}
 }
 
 export class DeletePizzaSuccess implements Action {
@@ -64,13 +64,13 @@ export class DeletePizzaSuccess implements Action {
 
 export class DeletePizzaFailed implements Action {
   readonly type = PizzaActionTypes.DeletePizzaFailed;
-  constructor(public payload: {error: Error}) {}
+  constructor(public payload: Error) {}
 }
 
 export class UpdatePizza implements Action {
   readonly type = PizzaActionTypes.UpdatePizza;
 
-  constructor(public payload: { pizza: IPizza }) {}
+  constructor(public payload: IPizza ) {}
 }
 
 export class UpdatePizzaSuccess implements Action {
@@ -80,7 +80,7 @@ export class UpdatePizzaSuccess implements Action {
 
 export class UpdatePizzaFailed implements Action {
   readonly type = PizzaActionTypes.UpdatePizzaFailed;
-  constructor(public payload: {error: Error}) {}
+  constructor(public payload: Error) {}
 }
 
 
